@@ -32,6 +32,7 @@ import subprocess
 import bpy
 import sys
 import addon_utils
+from pathlib import Path
 
 # install pip
 
@@ -52,8 +53,9 @@ os.environ.pop("PIP_REQ_TRACKER", None)
 # install dependencies
 
 python_path = get_python_path()
+target = Path(python_path).parent.parent/"lib"/"site-packages"
 packages = {'grpcio', 'bidict', 'grpcio-tools', 'pandas'}
-subprocess.check_output([python_path, '-m', 'pip', 'install', *packages])
+subprocess.check_output([python_path, '-m', 'pip', 'install', "--upgrade", '--target', str(target), *packages])
 
 # test if dependencies are installed
 
