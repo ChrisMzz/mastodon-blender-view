@@ -33,6 +33,7 @@ import bpy
 import sys
 import addon_utils
 from pathlib import Path
+from site import getsitepackages
 
 # install pip
 
@@ -53,9 +54,12 @@ os.environ.pop("PIP_REQ_TRACKER", None)
 # install dependencies
 
 python_path = get_python_path()
-target = Path(python_path).parent.parent/"lib"/"site-packages"
+for path in getsitepackages():
+    if "site-packages" in path:
+        target = path
+        break
 packages = {'grpcio', 'bidict', 'grpcio-tools', 'pandas'}
-subprocess.check_output([python_path, '-m', 'pip', 'install', "--upgrade", '--target', str(target), *packages])
+subprocess.check_output([python_path, '-m', 'pip', 'install', '--target', str(target), *packages])
 
 # test if dependencies are installed
 
